@@ -1,0 +1,20 @@
+<div class="flex min-h-[calc(100vh-64px-56px)] items-center justify-center">
+  <mat-card class="w-full max-w-sm p-8">
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+      <div class="mb-6 text-center text-2xl">Jelentkezzen be!</div>
+      <mat-form-field class="mb-4 w-full" appearance="outline">
+        <mat-label>Felhasználónév</mat-label>
+        <input matInput type="text" formControlName="username" required />
+        <mat-error *ngIf="email?.invalid && email?.touched">Kötelező mező!</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="mb-6 w-full" appearance="outline">
+        <mat-label>Jelszó</mat-label>
+        <input matInput type="password" formControlName="password" required />
+        <mat-error *ngIf="password?.invalid && password?.touched">Kötelező mező!</mat-error>
+      </mat-form-field>
+
+      <button mat-flat-button class="w-full" [disabled]="loginForm.invalid">Bejelentkezés</button>
+    </form>
+  </mat-card>
+</div>
