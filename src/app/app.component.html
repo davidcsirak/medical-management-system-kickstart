@@ -1,6 +1,8 @@
-<app-header></app-header>
+@if (currentUser$ | async) {
+  <app-header></app-header>
+}
 <div class="flex w-full flex-col items-center">
-  <div class="w-full max-w-screen-2xl p-8">
+  <div class="w-full max-w-screen-2xl p-16">
     <router-outlet />
   </div>
 </div>

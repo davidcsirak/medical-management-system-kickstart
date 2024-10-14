@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { Validators, FormBuilder } from '@angular/forms';
 import { AuthenticationController } from '../../controllers/authentication.controller';
 import { catchError, of, tap } from 'rxjs';
+import { Router } from '@angular/router';
+import { UrlEnum } from '../../../shared/enums/url.enum';
 
 @Component({
   selector: 'app-login',
@@ -9,17 +11,18 @@ import { catchError, of, tap } from 'rxjs';
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
-  public loginForm = this.formBuilder.group({
+  public loginForm = this.fb.group({
     username: ['', [Validators.required]],
     password: ['', [Validators.required]],
   });
   constructor(
-    private formBuilder: FormBuilder,
+    private fb: FormBuilder,
     private authController: AuthenticationController,
+    private rotuer: Router,
   ) {}
 
-  get email() {
-    return this.loginForm.get('email');
+  get username() {
+    return this.loginForm.get('username');
   }
 
   get password() {
@@ -33,9 +36,7 @@ export class LoginComponent {
       this.authController
         .login(username, password)
         .pipe(
-          tap((response) => {
-            console.log(response);
-          }),
+          tap(() => this.rotuer.navigate([UrlEnum.USER])),
           catchError(() => {
             this.loginForm.enable();
             return of(null);

@@ -1,9 +1,13 @@
-<div class="flex flex-row items-center bg-blue-100 px-4 py-2">
-  <button mat-button>Felhasználók</button>
-  <button mat-button>Telephelyek</button>
+<div class="flex flex-row items-center bg-blue-200 px-4 py-2">
+  @if ((currentUser$ | async)?.role === RoleEnum.ROLE_ADMIN) {
+    <button mat-button routerLink="user">Felhasználók</button>
+    <button mat-button routerLink="location">Telephelyek</button>
+  } @else {
+    <button mat-button routerLink="patient">Páciensek</button>
+  }
   <div class="flex-grow"></div>
-  <div class="mx-4">{{ 'Kiss József' }}</div>
-  <button mat-icon-button color="primary">
+  <div class="mx-4">{{ (currentUser$ | async)?.username }}</div>
+  <button mat-icon-button color="primary" (click)="onLogout()">
     <mat-icon>logout</mat-icon>
   </button>
 </div>

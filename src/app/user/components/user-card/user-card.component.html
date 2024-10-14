@@ -1,0 +1,34 @@
+<div class="flex flex-col items-center">
+  <mat-card class="p-8">
+    <div class="mb-6 text-2xl">Felhasználó létrehozása</div>
+    <form [formGroup]="createUserForm" (ngSubmit)="onCreateUser()">
+      <mat-form-field class="mb-4 w-full" appearance="outline">
+        <mat-label>Felhasználónév</mat-label>
+        <input matInput type="text" formControlName="username" required />
+        <mat-error *ngIf="username?.invalid && username?.touched">Kötelező mező!</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="mb-4 w-full" appearance="outline">
+        <mat-label>Jelszó</mat-label>
+        <input matInput type="password" formControlName="password" required />
+        <mat-error *ngIf="password?.invalid && password?.touched">Kötelező mező!</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="mb-4 w-full" appearance="outline">
+        <mat-label>Szerepkör</mat-label>
+        <mat-select formControlName="role">
+          <mat-option [value]="RoleEnum.ROLE_USER">Felhasználó</mat-option>
+          <mat-option [value]="RoleEnum.ROLE_ADMIN">Adminisztrátor</mat-option>
+        </mat-select>
+        <mat-error *ngIf="role?.invalid && role?.touched">Kötelező mező!</mat-error>
+      </mat-form-field>
+
+      <div class="flex flex-row justify-end">
+        <button mat-flat-button [disabled]="createUserForm.invalid">
+          <mat-icon>add</mat-icon>
+          Létrehozás
+        </button>
+      </div>
+    </form>
+  </mat-card>
+</div>
