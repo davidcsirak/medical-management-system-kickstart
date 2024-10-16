@@ -9,8 +9,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { UserListComponent } from './components/user-list/user-list.component';
+import { CardComponent } from '../shared/components/card/card.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
 @NgModule({
-  declarations: [UserCardComponent],
+  declarations: [UserCardComponent, UserListComponent],
   imports: [
     CommonModule,
     UserRoutingModule,
@@ -20,8 +24,10 @@ import { MatSelectModule } from '@angular/material/select';
     ReactiveFormsModule,
     MatInputModule,
     MatButtonModule,
-    MatCardModule,
     MatSelectModule,
+    CardComponent,
+    MatPaginatorModule,
+    MatTableModule,
   ],
 })
 export class UserModule {}

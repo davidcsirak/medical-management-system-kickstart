@@ -58,6 +58,11 @@ export class AuthenticationController {
     this._currentUser$.next(null);
   }
 
+  public clientLogout() {
+    this.router.navigate([UrlEnum.AUTHENTICATION]);
+    this.clearUser();
+  }
+
   public getSessionToken() {
     return localStorage.getItem('accessToken') ?? '';
   }

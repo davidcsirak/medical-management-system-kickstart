@@ -1,7 +1,7 @@
-import { HttpInterceptorFn } from '@angular/common/http';
+import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { AuthenticationController } from '../../authentication/controllers/authentication.controller';
-import { switchMap, tap } from 'rxjs';
+import { catchError, switchMap, tap, throwError } from 'rxjs';
 
 export const headerInterceptor: HttpInterceptorFn = (req, next) => {
   const authController = inject(AuthenticationController);
@@ -10,7 +10,18 @@ export const headerInterceptor: HttpInterceptorFn = (req, next) => {
     return next(req);
   } else if (req.url.includes('refresh')) {
     return next(
-      req.clone({ setHeaders: { Authorization: `Bearer ${authController.getRefreshToken()}` } }),
+      req.clone({
+        setHeaders: {
+          Authorization: `Bearer ${authController.getRefreshToken()}`,
+        },
+      }),
+    ).pipe(
+      catchError((err: HttpErrorResponse) => {
+        if ((err.error.status as number) === 403) {
+          authController.clientLogout();
+        }
+        return throwError(() => err);
+      }),
     );
   }
   return authController.refresh().pipe(

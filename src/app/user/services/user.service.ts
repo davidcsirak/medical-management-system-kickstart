@@ -3,13 +3,39 @@ import { ApiService } from '../../shared/services/api.service';
 import { Observable } from 'rxjs';
 import { IUser } from '../interfaces/user.interface';
 import { ICreateUserRequest } from '../interfaces/create-user-request.interface';
-import { CREATE_USER_URL } from '../utils/user-path';
+import { CREATE_USER_URL, USER_URL } from '../utils/user-path';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { IQueryResponse } from '../../shared/interfaces/query-response.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService extends ApiService {
+  constructor(private http: HttpClient) {
+    super(http);
+  }
   public createUser(req: ICreateUserRequest): Observable<IUser> {
     return this.post(CREATE_USER_URL, req);
+  }
+
+  public getUser(id: string): Observable<IUser> {
+    return this.get(`${USER_URL}/${id}`);
+  }
+
+  public changePassword(userId: string, newPassword: string) {
+    return this.patch(`${USER_URL}/${userId}/password-change`, { password: newPassword });
+  }
+
+  public deleteUser(id: string) {
+    return this.delete(`${USER_URL}/${id}`);
+  }
+
+  public checkUsernameExits(username: string): Observable<{ usernameExists: boolean }> {
+    return this.get(`${USER_URL}/exists?username=${username}`);
+  }
+
+  public getUsers(page: number, size: number): Observable<IQueryResponse<IUser>> {
+    const queryParams = new HttpParams().set('page', page).set('size', size);
+    return this.http.get<IQueryResponse<IUser>>(USER_URL, { params: queryParams });
   }
 }

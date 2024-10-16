@@ -1,0 +1,36 @@
+<div class="flex flex-col items-center">
+  <mat-card class="p-8">
+    <div class="mb-6 text-center text-2xl">{{ title }}</div>
+    <ng-content></ng-content>
+    @if (showActions) {
+      <div class="flex flex-row justify-end gap-4">
+        @switch (changeType) {
+          @case (ChangeTypeEnum.CREATE) {
+            <button mat-flat-button [disabled]="formGroup.invalid" (click)="createBtnOnClick()">
+              <mat-icon>add</mat-icon>
+              Létrehozás
+            </button>
+          }
+          @case (ChangeTypeEnum.EDIT) {
+            <button mat-flat-button (click)="deleteBtnOnClick()" color="warn">
+              <mat-icon>delete</mat-icon>
+              Törlés
+            </button>
+            @if (showSaveButtonOnEditMode) {
+              <button mat-flat-button [disabled]="formGroup.invalid" (click)="saveBtnOnClick()">
+                <mat-icon>edit</mat-icon>
+                Mentés
+              </button>
+            }
+          }
+          @case (ChangeTypeEnum.VIEW) {
+            <button mat-flat-button (click)="editBtnOnClick()">
+              <mat-icon>edit</mat-icon>
+              Szerkesztés
+            </button>
+          }
+        }
+      </div>
+    }
+  </mat-card>
+</div>
