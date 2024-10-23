@@ -1,47 +1,53 @@
-import { Component, EventEmitter, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { debounceTime, switchMap, Observable } from 'rxjs';
+import { debounceTime, switchMap, Observable, tap } from 'rxjs';
 import { ILocationAutocompleteResult } from '../../../location/interfaces/location-autocomplete-result.interface';
-import { LocationService } from '../../../location/services/location.service';
 import { IAutocompletePageable } from '../../../shared/interfaces/autocomplete-pageable.interface';
 import { IQueryResponse } from '../../../shared/interfaces/query-response.interface';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { LocationController } from '../../../location/controllers/location.controller';
 
 @Component({
   selector: 'app-location-autocomplete',
   templateUrl: './location-autocomplete.component.html',
   styleUrl: './location-autocomplete.component.scss',
 })
-export class LocationAutocompleteComponent implements OnInit {
-  locationControl = new FormControl(); // Form control for the autocomplete input
-  filteredLocations: ILocationAutocompleteResult[] = []; // Filtered locations for autocomplete
+export class LocationAutocompleteComponent {
+  locationControl = new FormControl();
+  filteredLocations: ILocationAutocompleteResult[] = [];
 
-  @Output() locationSelected = new EventEmitter<ILocationAutocompleteResult>(); // Event to notify parent when a location is selected
+  @Input({ required: true }) userId!: string;
+  @Output() locationSelected = new EventEmitter<ILocationAutocompleteResult>();
 
-  userId = '123'; // Example userId
   pageable: IAutocompletePageable = { page: 0, size: 10 };
 
-  constructor(private locationService: LocationService) {}
-
-  ngOnInit(): void {
-    // Listen to value changes in the autocomplete input and fetch data from the server
+  constructor(private locationController: LocationController) {
     this.locationControl.valueChanges
       .pipe(
-        debounceTime(500), // Wait for user to stop typing
-        switchMap((value) => this.fetchLocations(value)), // Fetch locations from the server
+        debounceTime(500),
+        switchMap((value) => this.fetchLocations(value || '')),
+        tap((res) => {
+          this.filteredLocations = res.content;
+        }),
+        takeUntilDestroyed(),
       )
-      .subscribe((locations) => {
-        this.filteredLocations = locations.content; // Set filtered locations
-      });
+      .subscribe();
   }
 
-  // Fetch locations from the server based on user input
   fetchLocations(shortName: string): Observable<IQueryResponse<ILocationAutocompleteResult>> {
-    return this.locationService.getLocationAutocomplete(this.userId, shortName, this.pageable);
+    return this.locationController.getLocationAutocomplete(this.userId, shortName, this.pageable);
   }
 
-  // Handle location selection from autocomplete
   selectLocation(location: ILocationAutocompleteResult): void {
-    this.locationSelected.emit(location); // Emit selected location to parent
-    this.locationControl.setValue(''); // Clear input after selection
+    this.locationSelected.emit(location);
+    this.locationControl.setValue('');
+  }
+
+  onInputFocus(): void {
+    if (!this.locationControl.value) {
+      this.fetchLocations('').subscribe((res) => {
+        this.filteredLocations = res.content;
+      });
+    }
   }
 }

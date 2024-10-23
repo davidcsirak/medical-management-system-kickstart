@@ -1,5 +1,6 @@
 <mat-chip-set>
   <mat-chip
+    highlighted
     *ngFor="let location of selectedLocations"
     [removable]="true"
     (removed)="removeLocation(location)">

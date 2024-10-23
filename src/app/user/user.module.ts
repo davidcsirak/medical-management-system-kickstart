@@ -18,7 +18,12 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { LocationChipListComponent } from './components/location-chip-list/location-chip-list.component';
 import { LocationAutocompleteComponent } from './components/location-autocomplete/location-autocomplete.component';
 @NgModule({
-  declarations: [UserCardComponent, UserListComponent, LocationChipListComponent, LocationAutocompleteComponent],
+  declarations: [
+    UserCardComponent,
+    UserListComponent,
+    LocationChipListComponent,
+    LocationAutocompleteComponent,
+  ],
   imports: [
     CommonModule,
     UserRoutingModule,

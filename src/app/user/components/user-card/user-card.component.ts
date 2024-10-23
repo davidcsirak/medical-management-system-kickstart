@@ -1,17 +1,14 @@
-import { Component, DestroyRef, inject, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroupDirective, Validators } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroupDirective, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoleEnum } from '../../../shared/enums/role.enum';
 import { UserController } from '../../controllers/user.controller';
 import { UrlEnum } from '../../../shared/enums/url.enum';
-import { debounceTime, Observable, switchMap, tap } from 'rxjs';
+import { tap } from 'rxjs';
 import { ChangeTypeEnum } from '../../../shared/enums/change-type.enum';
 import { checkUsername } from '../../../shared/utils/async-validators';
 import { LocationController } from '../../../location/controllers/location.controller';
 import { ILocationAutocompleteResult } from '../../../location/interfaces/location-autocomplete-result.interface';
-import { IAutocompletePageable } from '../../../shared/interfaces/autocomplete-pageable.interface';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { IQueryResponse } from '../../../shared/interfaces/query-response.interface';
 
 @Component({
   selector: 'app-user-card',
@@ -31,15 +28,8 @@ export class UserCardComponent implements OnInit {
 
   public title!: string;
 
-  locationControl = new FormControl(); // Form control for the autocomplete input
-  selectedLocations: ILocationAutocompleteResult[] = []; // Array to store selected locations
-  filteredLocations: ILocationAutocompleteResult[] = []; // Filtered locations for autocomplete
+  public selectedLocations: ILocationAutocompleteResult[] = []; // Array to store selected locations
   userId = this.route.snapshot.paramMap.get('id') ?? ''; // Example userId
-  pageable: IAutocompletePageable = {
-    page: 0,
-    size: 10,
-  };
-  private destroyRef = inject(DestroyRef);
 
   public createUserForm = this.fb.group({
     username: ['', [Validators.required], [checkUsername()]],
@@ -65,42 +55,23 @@ export class UserCardComponent implements OnInit {
       this.createUserForm.controls.role.disable();
       this.title = 'Felhasználó szerkesztése';
       this.loadUserData();
-      this.locationControl.valueChanges
-        .pipe(
-          debounceTime(300), // Wait for user to stop typing
-          switchMap((value) => this.fetchLocations(value)), // Fetch locations from the server
-          takeUntilDestroyed(this.destroyRef),
-        )
-        .subscribe((locations) => {
-          this.filteredLocations = locations.content; // Set filtered locations
-        });
     }
   }
 
-  // Fetch locations from the server based on user input
-  fetchLocations(shortName: string): Observable<IQueryResponse<ILocationAutocompleteResult>> {
-    return this.locationController.getLocationAutocomplete(this.userId, shortName, this.pageable);
-  }
-
-  // Handle location selection from autocomplete
-  selectLocation(location: ILocationAutocompleteResult): void {
+  // Handle the selected location from the Autocomplete component
+  onLocationSelected(location: ILocationAutocompleteResult): void {
     if (!this.selectedLocations.some((l) => l.id === location.id)) {
-      this.selectedLocations.push(location); // Add selected location to chips
-      this.assignLocationToUser(location.id); // Call backend API to assign location to user
+      this.selectedLocations.push(location); // Add selected location to the chip list
+      this.userController.assignUserToLocation(this.userId, location.id).subscribe(); // Call API to assign location
     }
-    this.locationControl.setValue(''); // Clear input after selection
   }
 
-  assignLocationToUser(locationId: string): void {
-    this.userController.assignUserToLocation(this.userId, locationId).subscribe();
-  }
-
-  // Remove location from the selected list
-  removeLocation(location: ILocationAutocompleteResult): void {
+  // Handle the location removal from the Chip List component
+  onLocationRemoved(location: ILocationAutocompleteResult): void {
     const index = this.selectedLocations.indexOf(location);
     if (index >= 0) {
-      this.selectedLocations.splice(index, 1);
-      this.userController.unassignUserFromLocation(this.userId, location.id).subscribe();
+      this.selectedLocations.splice(index, 1); // Remove location from chip list
+      this.userController.unassignUserFromLocation(this.userId, location.id).subscribe(); // Call API to unassign location
     }
   }
 

@@ -18,7 +18,8 @@ export const headerInterceptor: HttpInterceptorFn = (req, next) => {
     ).pipe(
       catchError((err: HttpErrorResponse) => {
         if ((err.error.status as number) === 403) {
-          authController.clientLogout();
+          // authController.clientLogout();
+          console.log('refresh token expired');
         }
         return throwError(() => err);
       }),
