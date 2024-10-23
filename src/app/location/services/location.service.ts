@@ -1,0 +1,35 @@
+import { Injectable } from '@angular/core';
+import { ApiService } from '../../shared/services/api.service';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { ILocationGet } from '../interfaces/location-get.interface';
+import { ICreateLocationRequest } from '../interfaces/create-location-request.interface';
+import { CREATE_LOCATION_URL, LOCATION_URL } from '../utils/location-path';
+import { ILocation } from '../interfaces/location.interface';
+import { IQueryResponse } from '../../shared/interfaces/query-response.interface';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class LocationService extends ApiService {
+  constructor(private http: HttpClient) {
+    super(http);
+  }
+
+  createLocation(req: ICreateLocationRequest): Observable<ILocationGet> {
+    return this.post(CREATE_LOCATION_URL, req);
+  }
+
+  editLocation(req: ICreateLocationRequest, id: string): Observable<ILocationGet> {
+    return this.put(`${LOCATION_URL}/${id}`, req);
+  }
+
+  getLocation(id: string): Observable<ILocationGet> {
+    return this.get(`${LOCATION_URL}/${id}`);
+  }
+
+  public getLocations(page: number, size: number): Observable<IQueryResponse<ILocation>> {
+    const queryParams = new HttpParams().set('page', page).set('size', size);
+    return this.http.get<IQueryResponse<ILocation>>(LOCATION_URL, { params: queryParams });
+  }
+}

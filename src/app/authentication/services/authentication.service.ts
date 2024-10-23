@@ -8,7 +8,7 @@ import {
 } from '../utils/authentication.path';
 import { Observable } from 'rxjs';
 import { ILoginResponse } from '../interfaces/login-response.interface';
-import { IUser } from '../../user/interfaces/user.interface';
+import { IUserGet } from '../../user/interfaces/user-get.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +18,7 @@ export class AuthenticationService extends ApiService {
     return this.post(AUTHENTICATE_URL, { username, password });
   }
 
-  public getCurrentUser(): Observable<IUser> {
+  public getCurrentUser(): Observable<IUserGet> {
     return this.get(CURRENT_USER_URL);
   }
 

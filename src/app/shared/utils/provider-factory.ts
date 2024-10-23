@@ -1,9 +1,9 @@
 import { firstValueFrom } from 'rxjs';
 import { AuthenticationController } from '../../authentication/controllers/authentication.controller';
-import { IUser } from '../../user/interfaces/user.interface';
+import { IUserGet } from '../../user/interfaces/user-get.interface';
 
 export function AppInit(
   authenticationController: AuthenticationController,
-): () => Promise<IUser | null> {
+): () => Promise<IUserGet | null> {
   return () => firstValueFrom(authenticationController.restoreSession());
 }

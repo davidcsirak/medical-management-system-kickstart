@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '../../shared/services/api.service';
 import { Observable } from 'rxjs';
-import { IUser } from '../interfaces/user.interface';
+import { IUserGet } from '../interfaces/user-get.interface';
 import { ICreateUserRequest } from '../interfaces/create-user-request.interface';
 import { CREATE_USER_URL, USER_URL } from '../utils/user-path';
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -14,11 +14,11 @@ export class UserService extends ApiService {
   constructor(private http: HttpClient) {
     super(http);
   }
-  public createUser(req: ICreateUserRequest): Observable<IUser> {
+  public createUser(req: ICreateUserRequest): Observable<IUserGet> {
     return this.post(CREATE_USER_URL, req);
   }
 
-  public getUser(id: string): Observable<IUser> {
+  public getUser(id: string): Observable<IUserGet> {
     return this.get(`${USER_URL}/${id}`);
   }
 
@@ -34,8 +34,8 @@ export class UserService extends ApiService {
     return this.get(`${USER_URL}/exists?username=${username}`);
   }
 
-  public getUsers(page: number, size: number): Observable<IQueryResponse<IUser>> {
+  public getUsers(page: number, size: number): Observable<IQueryResponse<IUserGet>> {
     const queryParams = new HttpParams().set('page', page).set('size', size);
-    return this.http.get<IQueryResponse<IUser>>(USER_URL, { params: queryParams });
+    return this.http.get<IQueryResponse<IUserGet>>(USER_URL, { params: queryParams });
   }
 }

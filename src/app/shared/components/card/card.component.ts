@@ -22,6 +22,8 @@ export class CardComponent {
 
   @Input() showSaveButtonOnEditMode = true;
 
+  @Input() showDeleteButtonOnEditMode = true;
+
   @Input() showActions = true;
 
   @Output() create = new EventEmitter<void>();

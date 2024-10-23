@@ -1,9 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { UserController } from '../../controllers/user.controller';
-import { IUser } from '../../interfaces/user.interface';
+import { IUserGet } from '../../interfaces/user-get.interface';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { RoleEnum } from '../../../shared/enums/role.enum';
 import { IPaginatorData } from '../../../shared/interfaces/paginator-data.interface';
+import { Router } from '@angular/router';
+import { UrlEnum } from '../../../shared/enums/url.enum';
+import { tap } from 'rxjs';
+import { DEFAULT_PAGINATION_CONFIG } from '../../utils/default-pagination.util';
 
 @Component({
   selector: 'app-user-list',
@@ -11,21 +15,20 @@ import { IPaginatorData } from '../../../shared/interfaces/paginator-data.interf
   styleUrl: './user-list.component.scss',
 })
 export class UserListComponent implements OnInit {
-  displayedColumns: string[] = ['username', 'role', 'serviceProviders'];
+  displayedColumns: string[] = ['username', 'role', 'serviceProviders', 'actions'];
 
-  dataSource: IUser[] = [];
+  dataSource: IUserGet[] = [];
 
-  paginationConfig: IPaginatorData = {
-    pageIndex: 0,
-    pageSize: 5,
-    totalElements: 0,
-  };
+  paginationConfig: IPaginatorData = DEFAULT_PAGINATION_CONFIG;
 
   readonly RoleEnum = RoleEnum;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private userController: UserController) {}
+  constructor(
+    private userController: UserController,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
     this.loadUsers();
@@ -43,5 +46,16 @@ export class UserListComponent implements OnInit {
       this.paginationConfig.totalElements = res.totalElements;
       this.paginationConfig.pageSize = res.pageable.pageSize;
     });
+  }
+
+  onEditUser(user: IUserGet) {
+    this.router.navigate([UrlEnum.USER, user.id, UrlEnum.EDIT]);
+  }
+
+  onDeleteUser(user: IUserGet) {
+    this.userController
+      .deleteUser(user.id)
+      .pipe(tap(() => this.loadUsers()))
+      .subscribe();
   }
 }

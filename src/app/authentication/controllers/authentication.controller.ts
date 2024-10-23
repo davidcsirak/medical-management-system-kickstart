@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AuthenticationService } from '../services/authentication.service';
 import { BehaviorSubject, catchError, Observable, of, switchMap, tap } from 'rxjs';
-import { IUser } from '../../user/interfaces/user.interface';
+import { IUserGet } from '../../user/interfaces/user-get.interface';
 import { ILoginResponse } from '../interfaces/login-response.interface';
 import { Router } from '@angular/router';
 import { UrlEnum } from '../../shared/enums/url.enum';
@@ -10,7 +10,7 @@ import { UrlEnum } from '../../shared/enums/url.enum';
   providedIn: 'root',
 })
 export class AuthenticationController {
-  private _currentUser$ = new BehaviorSubject<IUser | null>(null);
+  private _currentUser$ = new BehaviorSubject<IUserGet | null>(null);
 
   constructor(
     private authService: AuthenticationService,
@@ -40,7 +40,7 @@ export class AuthenticationController {
     );
   }
 
-  public setUser(user: IUser) {
+  public setUser(user: IUserGet) {
     this._currentUser$.next(user);
   }
 
@@ -49,7 +49,7 @@ export class AuthenticationController {
     localStorage.setItem('refreshToken', refreshToken);
   }
 
-  public getCurrentUser(): Observable<IUser> {
+  public getCurrentUser(): Observable<IUserGet> {
     return this.authService.getCurrentUser();
   }
 
@@ -71,7 +71,7 @@ export class AuthenticationController {
     return localStorage.getItem('refreshToken') ?? '';
   }
 
-  public getUserAsObservable(): Observable<IUser | null> {
+  public getUserAsObservable(): Observable<IUserGet | null> {
     return this._currentUser$.asObservable();
   }
 

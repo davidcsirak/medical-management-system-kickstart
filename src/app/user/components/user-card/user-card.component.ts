@@ -22,7 +22,7 @@ export class UserCardComponent implements OnInit {
 
   public changeType!: ChangeTypeEnum;
 
-  public routeId?: string;
+  public routeId = this.route.snapshot.paramMap.get('id');
 
   public title!: string;
 
@@ -36,9 +36,7 @@ export class UserCardComponent implements OnInit {
     private router: Router,
     private userController: UserController,
     private route: ActivatedRoute,
-  ) {
-    this.routeId = this.route.snapshot.paramMap.get('id') ?? undefined;
-  }
+  ) {}
   ngOnInit(): void {
     if (!this.routeId || this.router.url.includes('new')) {
       this.changeType = ChangeTypeEnum.CREATE;
@@ -79,10 +77,6 @@ export class UserCardComponent implements OnInit {
         .pipe(tap((res) => this.router.navigate([UrlEnum.USER, res.id, UrlEnum.EDIT])))
         .subscribe();
     }
-  }
-
-  public onEditUser() {
-    this.router.navigate([UrlEnum.USER, this.routeId, UrlEnum.EDIT]);
   }
 
   public onDeleteUser() {

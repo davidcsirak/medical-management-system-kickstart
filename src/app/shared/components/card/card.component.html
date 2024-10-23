@@ -12,10 +12,12 @@
             </button>
           }
           @case (ChangeTypeEnum.EDIT) {
-            <button mat-flat-button (click)="deleteBtnOnClick()" color="warn">
-              <mat-icon>delete</mat-icon>
-              Törlés
-            </button>
+            @if (showDeleteButtonOnEditMode) {
+              <button mat-flat-button (click)="deleteBtnOnClick()" color="warn">
+                <mat-icon>delete</mat-icon>
+                Törlés
+              </button>
+            }
             @if (showSaveButtonOnEditMode) {
               <button mat-flat-button [disabled]="formGroup.invalid" (click)="saveBtnOnClick()">
                 <mat-icon>edit</mat-icon>

@@ -1,1 +1,66 @@
-<p>location-card works!</p>
+<app-card
+  [title]="title"
+  [changeType]="changeType"
+  [formGroup]="createLocationForm"
+  (create)="onCreateLocation()"
+  (save)="onSaveLocation()"
+  [showDeleteButtonOnEditMode]="false">
+  <form [formGroup]="createLocationForm">
+    <mat-form-field class="mb-4 w-full" appearance="outline">
+      <mat-label>Telephely neve</mat-label>
+      <input matInput type="text" formControlName="longName" required />
+      <mat-error *ngIf="longName?.invalid && longName?.touched">Kötelező mező!</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="mb-4 w-full" appearance="outline">
+      <mat-label>Telephely rövidített neve</mat-label>
+      <input matInput type="text" formControlName="shortName" required />
+      <mat-error *ngIf="shortName?.hasError('required')"> Kötelező mező! </mat-error>
+      <mat-error *ngIf="phoneNumber?.hasError('minlength')">
+        A rövidített név minimum 3 karakter kell legyen!
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="mb-4 w-full" appearance="outline">
+      <mat-label>Telefonszám</mat-label>
+      <input matInput type="text" formControlName="phoneNumber" required />
+      <mat-error *ngIf="phoneNumber?.hasError('required')">Kötelező mező!</mat-error>
+      <mat-error *ngIf="phoneNumber?.hasError('minlength')">
+        A telefonszám minimum 8 karakter kell legyen!
+      </mat-error>
+      <mat-error *ngIf="phoneNumber?.hasError('maxlength')">
+        A telefonszám maximum 12 karakter lehet!
+      </mat-error>
+    </mat-form-field>
+
+    <div formGroupName="address">
+      <div class="flex flex-row gap-4">
+        <mat-form-field class="mb-4 w-full" appearance="outline">
+          <mat-label>Irányítószám</mat-label>
+          <input matInput type="text" formControlName="postCode" required />
+          <mat-error *ngIf="postCode?.hasError('required')">Kötelező mező!</mat-error>
+          <mat-error *ngIf="postCode?.hasError('maxlength')"
+            >Az irányítószám maximum 4 karakter lehet!</mat-error
+          >
+        </mat-form-field>
+        <mat-form-field class="mb-4 w-full" appearance="outline">
+          <mat-label>Város</mat-label>
+          <input matInput type="text" formControlName="city" required />
+          <mat-error *ngIf="city?.invalid && city?.touched">Kötelező mező!</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="flex flex-row gap-4">
+        <mat-form-field class="mb-4 w-full" appearance="outline">
+          <mat-label>Utca</mat-label>
+          <input matInput type="text" formControlName="street" required />
+          <mat-error *ngIf="street?.invalid && street?.touched">Kötelező mező!</mat-error>
+        </mat-form-field>
+        <mat-form-field class="mb-4 w-full" appearance="outline">
+          <mat-label>Házszám</mat-label>
+          <input matInput type="text" formControlName="houseNumber" required />
+          <mat-error *ngIf="houseNumber?.invalid && houseNumber?.touched">Kötelező mező!</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</app-card>

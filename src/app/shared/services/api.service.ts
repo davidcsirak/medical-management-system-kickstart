@@ -32,6 +32,11 @@ export abstract class ApiService {
     return this.httpClient.patch<T>(endPoint, body, options);
   }
 
+  /** PUT kérés küldése a _serviceUrl + endPoint_ végpontra. */
+  public put<T>(endPoint: string, body?: unknown, options?: IRequestOptions): Observable<T> {
+    return this.httpClient.put<T>(endPoint, body, options);
+  }
+
   /** DELETE kérés küldése a _serviceUrl + endPoint_ végpontra. */
   public delete<T>(endPoint: string, body?: unknown, options?: IRequestOptions): Observable<T> {
     return this.httpClient.delete<T>(endPoint, options);

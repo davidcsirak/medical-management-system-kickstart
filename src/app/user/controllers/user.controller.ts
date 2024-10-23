@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { RoleEnum } from '../../shared/enums/role.enum';
 import { Observable } from 'rxjs';
-import { IUser } from '../interfaces/user.interface';
+import { IUserGet } from '../interfaces/user-get.interface';
 import { IQueryResponse } from '../../shared/interfaces/query-response.interface';
 import { IPaginatorData } from '../../shared/interfaces/paginator-data.interface';
 
@@ -12,11 +12,11 @@ import { IPaginatorData } from '../../shared/interfaces/paginator-data.interface
 export class UserController {
   constructor(private userService: UserService) {}
 
-  public createUser(username: string, password: string, role: RoleEnum): Observable<IUser> {
+  public createUser(username: string, password: string, role: RoleEnum): Observable<IUserGet> {
     return this.userService.createUser({ username, password, role });
   }
 
-  public getUser(id: string): Observable<IUser> {
+  public getUser(id: string): Observable<IUserGet> {
     return this.userService.getUser(id);
   }
 
@@ -32,7 +32,7 @@ export class UserController {
     return this.userService.checkUsernameExits(username);
   }
 
-  public getUsers(paginatorData: IPaginatorData): Observable<IQueryResponse<IUser>> {
+  public getUsers(paginatorData: IPaginatorData): Observable<IQueryResponse<IUserGet>> {
     return this.userService.getUsers(paginatorData.pageIndex, paginatorData.pageSize);
   }
 }
