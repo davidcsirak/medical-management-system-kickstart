@@ -1,0 +1,9 @@
+<mat-chip-set>
+  <mat-chip
+    *ngFor="let location of selectedLocations"
+    [removable]="true"
+    (removed)="removeLocation(location)">
+    {{ location.shortName }}
+    <mat-icon matChipRemove>cancel</mat-icon>
+  </mat-chip>
+</mat-chip-set>

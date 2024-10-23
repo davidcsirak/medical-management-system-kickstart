@@ -40,4 +40,38 @@
       <mat-error *ngIf="role?.invalid && role?.touched">Kötelező mező!</mat-error>
     </mat-form-field>
   </form>
+  <div class="mt-4">
+    <mat-form-field class="location-chips w-full" appearance="outline">
+      <mat-chip-grid #chipList>
+        <!-- Display selected locations as chips -->
+        <mat-chip-row
+          color="primary"
+          highlighted
+          *ngFor="let location of selectedLocations"
+          [removable]="true"
+          (removed)="removeLocation(location)">
+          {{ location.shortName }}
+          <button matChipRemove>
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip-row>
+
+        <!-- Autocomplete input for selecting new locations -->
+        <input
+          placeholder="Telephelyek"
+          [matAutocomplete]="auto"
+          [formControl]="locationControl"
+          [matChipInputFor]="chipList" />
+      </mat-chip-grid>
+
+      <!-- Autocomplete dropdown that displays filtered locations from the server -->
+      <mat-autocomplete
+        #auto="matAutocomplete"
+        (optionSelected)="selectLocation($event.option.value)">
+        <mat-option *ngFor="let location of filteredLocations" [value]="location">
+          {{ location.shortName }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
 </app-card>

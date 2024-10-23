@@ -7,6 +7,8 @@ import { ICreateLocationRequest } from '../interfaces/create-location-request.in
 import { CREATE_LOCATION_URL, LOCATION_URL } from '../utils/location-path';
 import { ILocation } from '../interfaces/location.interface';
 import { IQueryResponse } from '../../shared/interfaces/query-response.interface';
+import { IAutocompletePageable } from '../../shared/interfaces/autocomplete-pageable.interface';
+import { ILocationAutocompleteResult } from '../interfaces/location-autocomplete-result.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -28,8 +30,24 @@ export class LocationService extends ApiService {
     return this.get(`${LOCATION_URL}/${id}`);
   }
 
-  public getLocations(page: number, size: number): Observable<IQueryResponse<ILocation>> {
+  getLocations(page: number, size: number): Observable<IQueryResponse<ILocation>> {
     const queryParams = new HttpParams().set('page', page).set('size', size);
     return this.http.get<IQueryResponse<ILocation>>(LOCATION_URL, { params: queryParams });
+  }
+
+  getLocationAutocomplete(
+    userId: string,
+    shortName: string,
+    pageable: IAutocompletePageable,
+  ): Observable<IQueryResponse<ILocationAutocompleteResult>> {
+    const queryParams = new HttpParams()
+      .set('userId', userId)
+      .set('shortName', shortName)
+      .set('pageable.page', pageable.page)
+      .set('pageable.size', pageable.size);
+
+    return this.http.get<IQueryResponse<ILocationAutocompleteResult>>(`${LOCATION_URL}/search`, {
+      params: queryParams,
+    });
   }
 }

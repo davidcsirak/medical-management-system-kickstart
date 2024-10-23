@@ -1,0 +1,8 @@
+<mat-form-field>
+  <input placeholder="Telephelyek" [matAutocomplete]="auto" [formControl]="locationControl" />
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectLocation($event.option.value)">
+    <mat-option *ngFor="let location of filteredLocations" [value]="location">
+      {{ location.shortName }}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>

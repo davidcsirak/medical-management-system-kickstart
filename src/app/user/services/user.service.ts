@@ -38,4 +38,12 @@ export class UserService extends ApiService {
     const queryParams = new HttpParams().set('page', page).set('size', size);
     return this.http.get<IQueryResponse<IUserGet>>(USER_URL, { params: queryParams });
   }
+
+  public assignUserToLocation(userId: string, locationId: string) {
+    return this.post(`${USER_URL}/${userId}/service-provider/${locationId}`);
+  }
+
+  public unassignUserFromLocation(userId: string, locationId: string) {
+    return this.delete(`${USER_URL}/${userId}/service-provider/${locationId}`);
+  }
 }

@@ -6,6 +6,8 @@ import { ICreateLocationRequest } from '../interfaces/create-location-request.in
 import { ILocation } from '../interfaces/location.interface';
 import { IPaginatorData } from '../../shared/interfaces/paginator-data.interface';
 import { IQueryResponse } from '../../shared/interfaces/query-response.interface';
+import { IAutocompletePageable } from '../../shared/interfaces/autocomplete-pageable.interface';
+import { ILocationAutocompleteResult } from '../interfaces/location-autocomplete-result.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -27,5 +29,13 @@ export class LocationController {
 
   public getLocations(paginatorData: IPaginatorData): Observable<IQueryResponse<ILocation>> {
     return this.locationService.getLocations(paginatorData.pageIndex, paginatorData.pageSize);
+  }
+
+  public getLocationAutocomplete(
+    userId: string,
+    shortName: string,
+    pageable: IAutocompletePageable,
+  ): Observable<IQueryResponse<ILocationAutocompleteResult>> {
+    return this.locationService.getLocationAutocomplete(userId, shortName, pageable);
   }
 }

@@ -35,4 +35,12 @@ export class UserController {
   public getUsers(paginatorData: IPaginatorData): Observable<IQueryResponse<IUserGet>> {
     return this.userService.getUsers(paginatorData.pageIndex, paginatorData.pageSize);
   }
+
+  public assignUserToLocation(userId: string, locationId: string) {
+    return this.userService.assignUserToLocation(userId, locationId);
+  }
+
+  public unassignUserFromLocation(userId: string, locationId: string) {
+    return this.userService.unassignUserFromLocation(userId, locationId);
+  }
 }

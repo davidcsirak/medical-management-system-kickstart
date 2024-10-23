@@ -13,8 +13,12 @@ import { UserListComponent } from './components/user-list/user-list.component';
 import { CardComponent } from '../shared/components/card/card.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { LocationChipListComponent } from './components/location-chip-list/location-chip-list.component';
+import { LocationAutocompleteComponent } from './components/location-autocomplete/location-autocomplete.component';
 @NgModule({
-  declarations: [UserCardComponent, UserListComponent],
+  declarations: [UserCardComponent, UserListComponent, LocationChipListComponent, LocationAutocompleteComponent],
   imports: [
     CommonModule,
     UserRoutingModule,
@@ -28,6 +32,8 @@ import { MatTableModule } from '@angular/material/table';
     CardComponent,
     MatPaginatorModule,
     MatTableModule,
+    MatChipsModule,
+    MatAutocompleteModule,
   ],
 })
 export class UserModule {}
