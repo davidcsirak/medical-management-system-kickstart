@@ -9,6 +9,7 @@ import { ChangeTypeEnum } from '../../../shared/enums/change-type.enum';
 import { checkUsername } from '../../../shared/utils/async-validators';
 import { LocationController } from '../../../location/controllers/location.controller';
 import { ILocationAutocompleteResult } from '../../../location/interfaces/location-autocomplete-result.interface';
+import { IUserGet } from '../../interfaces/user-get.interface';
 
 @Component({
   selector: 'app-user-card',
@@ -27,6 +28,8 @@ export class UserCardComponent implements OnInit {
   public routeId = this.route.snapshot.paramMap.get('id');
 
   public title!: string;
+
+  public userData?: IUserGet;
 
   public selectedLocations: ILocationAutocompleteResult[] = []; // Array to store selected locations
   userId = this.route.snapshot.paramMap.get('id') ?? ''; // Example userId
@@ -47,7 +50,6 @@ export class UserCardComponent implements OnInit {
     if (!this.routeId || this.router.url.includes('new')) {
       this.changeType = ChangeTypeEnum.CREATE;
       this.title = 'Felhasználó létrehozása';
-      // this.locationController.getLocationAutocomplete('1', 'cs', { page: 0, size: 10 }).subscribe();
       return;
     } else {
       this.changeType = ChangeTypeEnum.EDIT;
@@ -58,20 +60,22 @@ export class UserCardComponent implements OnInit {
     }
   }
 
-  // Handle the selected location from the Autocomplete component
   onLocationSelected(location: ILocationAutocompleteResult): void {
     if (!this.selectedLocations.some((l) => l.id === location.id)) {
-      this.selectedLocations.push(location); // Add selected location to the chip list
-      this.userController.assignUserToLocation(this.userId, location.id).subscribe(); // Call API to assign location
+      this.userController
+        .assignUserToLocation(this.userId, location.id)
+        .pipe(tap(() => this.selectedLocations.push(location)))
+        .subscribe();
     }
   }
 
-  // Handle the location removal from the Chip List component
   onLocationRemoved(location: ILocationAutocompleteResult): void {
     const index = this.selectedLocations.indexOf(location);
     if (index >= 0) {
-      this.selectedLocations.splice(index, 1); // Remove location from chip list
-      this.userController.unassignUserFromLocation(this.userId, location.id).subscribe(); // Call API to unassign location
+      this.userController
+        .unassignUserFromLocation(this.userId, location.id)
+        .pipe(tap(() => this.selectedLocations.splice(index, 1)))
+        .subscribe();
     }
   }
 
@@ -94,6 +98,7 @@ export class UserCardComponent implements OnInit {
         tap((res) => {
           this.createUserForm.patchValue(res);
           this.selectedLocations = res.serviceProviders;
+          this.userData = res;
         }),
       )
       .subscribe();

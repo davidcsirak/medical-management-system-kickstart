@@ -19,7 +19,7 @@ export class LocationAutocompleteComponent {
   @Input({ required: true }) userId!: string;
   @Output() locationSelected = new EventEmitter<ILocationAutocompleteResult>();
 
-  pageable: IAutocompletePageable = { page: 0, size: 10 };
+  pageable: IAutocompletePageable = { page: 0, size: 20 };
 
   constructor(private locationController: LocationController) {
     this.locationControl.valueChanges
