@@ -40,13 +40,15 @@
       <mat-error *ngIf="role?.invalid && role?.touched">Kötelező mező!</mat-error>
     </mat-form-field>
   </form>
-  <div class="mb-7 flex flex-col gap-3">
-    <div class="text-lg">Felhasználóhoz tartozó telephelyek:</div>
-    <app-location-chip-list
-      [selectedLocations]="selectedLocations"
-      (removeLocationEvent)="onLocationRemoved($event)">
-    </app-location-chip-list>
-  </div>
-  <app-location-autocomplete [userId]="userId" (locationSelected)="onLocationSelected($event)">
-  </app-location-autocomplete>
+  @if (changeType === ChangeTypeEnum.EDIT) {
+    <div class="mb-7 flex flex-col gap-3">
+      <div class="text-lg">Felhasználóhoz tartozó telephelyek:</div>
+      <app-location-chip-list
+        [selectedLocations]="selectedLocations"
+        (removeLocationEvent)="onLocationRemoved($event)">
+      </app-location-chip-list>
+    </div>
+    <app-location-autocomplete [userId]="userId" (locationSelected)="onLocationSelected($event)">
+    </app-location-autocomplete>
+  }
 </app-card>
