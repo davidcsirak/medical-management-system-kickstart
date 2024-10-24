@@ -1,4 +1,4 @@
-export interface ILocationAutocompleteResult {
+export interface ILocationSearchResult {
   id: string;
   shortName: string;
 }

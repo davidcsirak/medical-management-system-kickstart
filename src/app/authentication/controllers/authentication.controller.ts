@@ -75,6 +75,10 @@ export class AuthenticationController {
     return this._currentUser$.asObservable();
   }
 
+  public getCurrentUserValue() {
+    return this._currentUser$.getValue();
+  }
+
   public restoreSession() {
     return this.getCurrentUser().pipe(
       tap((user) => this.setUser(user)),

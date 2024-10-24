@@ -40,5 +40,6 @@ import { LocationAutocompleteComponent } from './components/location-autocomplet
     MatChipsModule,
     MatAutocompleteModule,
   ],
+  exports: [LocationAutocompleteComponent],
 })
 export class UserModule {}

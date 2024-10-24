@@ -8,7 +8,7 @@ import { CREATE_LOCATION_URL, LOCATION_URL } from '../utils/location-path';
 import { ILocation } from '../interfaces/location.interface';
 import { IQueryResponse } from '../../shared/interfaces/query-response.interface';
 import { IAutocompletePageable } from '../../shared/interfaces/autocomplete-pageable.interface';
-import { ILocationAutocompleteResult } from '../interfaces/location-autocomplete-result.interface';
+import { ILocationSearchResult } from '../interfaces/location-autocomplete-result.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -39,14 +39,14 @@ export class LocationService extends ApiService {
     userId: string,
     shortName: string,
     pageable: IAutocompletePageable,
-  ): Observable<IQueryResponse<ILocationAutocompleteResult>> {
+  ): Observable<IQueryResponse<ILocationSearchResult>> {
     const queryParams = new HttpParams()
       .set('userId', userId)
       .set('shortName', shortName)
       .set('pageable.page', pageable.page)
       .set('pageable.size', pageable.size);
 
-    return this.http.get<IQueryResponse<ILocationAutocompleteResult>>(`${LOCATION_URL}/search`, {
+    return this.http.get<IQueryResponse<ILocationSearchResult>>(`${LOCATION_URL}/search`, {
       params: queryParams,
     });
   }

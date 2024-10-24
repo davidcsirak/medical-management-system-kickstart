@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ILocationAutocompleteResult } from '../../../location/interfaces/location-autocomplete-result.interface';
+import { ILocationSearchResult } from '../../../location/interfaces/location-autocomplete-result.interface';
 
 @Component({
   selector: 'app-location-chip-list',
@@ -7,10 +7,10 @@ import { ILocationAutocompleteResult } from '../../../location/interfaces/locati
   styleUrl: './location-chip-list.component.scss',
 })
 export class LocationChipListComponent {
-  @Input() selectedLocations: ILocationAutocompleteResult[] = [];
-  @Output() removeLocationEvent = new EventEmitter<ILocationAutocompleteResult>();
+  @Input() selectedLocations: ILocationSearchResult[] = [];
+  @Output() removeLocationEvent = new EventEmitter<ILocationSearchResult>();
 
-  removeLocation(location: ILocationAutocompleteResult): void {
+  removeLocation(location: ILocationSearchResult): void {
     this.removeLocationEvent.emit(location);
   }
 }

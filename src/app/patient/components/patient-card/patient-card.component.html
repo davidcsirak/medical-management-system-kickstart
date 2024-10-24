@@ -1,0 +1,62 @@
+<app-card
+  [title]="title"
+  [changeType]="changeType"
+  [formGroup]="createPatientForm"
+  (create)="onCreatePatient()"
+  (save)="onSavePatient()"
+  [showDeleteButtonOnEditMode]="false">
+  <form [formGroup]="createPatientForm">
+    <mat-form-field class="mb-4 w-full" appearance="outline">
+      <mat-label>Név</mat-label>
+      <input matInput type="text" formControlName="name" required />
+      <mat-error *ngIf="name?.hasError('required')">Kötelező mező!</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="mb-4 w-full" appearance="outline">
+      <mat-label>TAJ szám</mat-label>
+      <input matInput type="text" formControlName="socialSecurityNumber" required />
+      <mat-error *ngIf="socialSecurityNumber?.hasError('required')"> Kötelező mező! </mat-error>
+      <mat-error *ngIf="socialSecurityNumber?.hasError('minlength')">
+        Minimum 9 karakter!
+      </mat-error>
+      <mat-error *ngIf="socialSecurityNumber?.hasError('maxlength')">
+        Maximum 9 karakter!
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="mb-4 w-full" appearance="outline">
+      <mat-label>Neme</mat-label>
+      <mat-select formControlName="sex">
+        <mat-option [value]="SexEnum.MAN">Férfi</mat-option>
+        <mat-option [value]="SexEnum.WOMAN">Nő</mat-option>
+      </mat-select>
+      <mat-error *ngIf="sex?.hasError('required')"> Kötelező mező! </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="mb-4 w-full" appearance="outline">
+      <mat-label>Születési hely</mat-label>
+      <input matInput type="text" formControlName="placeOfBirth" required />
+      <mat-error *ngIf="placeOfBirth?.hasError('required')">Kötelező mező!</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="mb-4 w-full" appearance="outline">
+      <mat-label>Gyerekkori név</mat-label>
+      <input matInput type="text" formControlName="name" required />
+      <mat-error *ngIf="name?.hasError('required')">Kötelező mező!</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="mb-4 w-full" appearance="outline">
+      <mat-label>Születési dátum</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" required />
+      <mat-hint>MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field class="mb-4 w-full" appearance="outline">
+      <mat-label>Anyja gyerekkori neve</mat-label>
+      <input matInput type="text" formControlName="name" required />
+      <mat-error *ngIf="name?.hasError('required')">Kötelező mező!</mat-error>
+    </mat-form-field>
+  </form>
+</app-card>

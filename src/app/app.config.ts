@@ -1,4 +1,9 @@
-import { APP_INITIALIZER, ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import {
+  APP_INITIALIZER,
+  ApplicationConfig,
+  importProvidersFrom,
+  provideZoneChangeDetection,
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -7,6 +12,7 @@ import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/
 import { headerInterceptor } from './shared/interceptors/header.interceptor';
 import { AuthenticationController } from './authentication/controllers/authentication.controller';
 import { AppInit } from './shared/utils/provider-factory';
+import { MatNativeDateModule } from '@angular/material/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -14,6 +20,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideAnimationsAsync(),
     provideHttpClient(withFetch(), withInterceptors([headerInterceptor])),
+    importProvidersFrom(MatNativeDateModule),
     {
       provide: APP_INITIALIZER,
       useFactory: AppInit,

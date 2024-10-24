@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { debounceTime, switchMap, Observable, tap } from 'rxjs';
-import { ILocationAutocompleteResult } from '../../../location/interfaces/location-autocomplete-result.interface';
+import { ILocationSearchResult } from '../../../location/interfaces/location-autocomplete-result.interface';
 import { IAutocompletePageable } from '../../../shared/interfaces/autocomplete-pageable.interface';
 import { IQueryResponse } from '../../../shared/interfaces/query-response.interface';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -14,10 +14,10 @@ import { LocationController } from '../../../location/controllers/location.contr
 })
 export class LocationAutocompleteComponent {
   locationControl = new FormControl();
-  filteredLocations: ILocationAutocompleteResult[] = [];
+  filteredLocations: ILocationSearchResult[] = [];
 
   @Input({ required: true }) userId!: string;
-  @Output() locationSelected = new EventEmitter<ILocationAutocompleteResult>();
+  @Output() locationSelected = new EventEmitter<ILocationSearchResult>();
 
   pageable: IAutocompletePageable = { page: 0, size: 20 };
 
@@ -34,11 +34,11 @@ export class LocationAutocompleteComponent {
       .subscribe();
   }
 
-  fetchLocations(shortName: string): Observable<IQueryResponse<ILocationAutocompleteResult>> {
+  fetchLocations(shortName: string): Observable<IQueryResponse<ILocationSearchResult>> {
     return this.locationController.getLocationAutocomplete(this.userId, shortName, this.pageable);
   }
 
-  selectLocation(location: ILocationAutocompleteResult): void {
+  selectLocation(location: ILocationSearchResult): void {
     this.locationSelected.emit(location);
     this.locationControl.setValue('');
   }

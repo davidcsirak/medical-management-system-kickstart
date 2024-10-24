@@ -8,7 +8,7 @@ import { tap } from 'rxjs';
 import { ChangeTypeEnum } from '../../../shared/enums/change-type.enum';
 import { checkUsername } from '../../../shared/utils/async-validators';
 import { LocationController } from '../../../location/controllers/location.controller';
-import { ILocationAutocompleteResult } from '../../../location/interfaces/location-autocomplete-result.interface';
+import { ILocationSearchResult } from '../../../location/interfaces/location-autocomplete-result.interface';
 import { IUserGet } from '../../interfaces/user-get.interface';
 
 @Component({
@@ -31,9 +31,8 @@ export class UserCardComponent implements OnInit {
 
   public userData?: IUserGet;
 
-  public selectedLocations: ILocationAutocompleteResult[] = []; // Array to store selected locations
+  public selectedLocations: ILocationSearchResult[] = []; // Array to store selected locations
   userId = this.route.snapshot.paramMap.get('id') ?? ''; // Example userId
-
   public createUserForm = this.fb.group({
     username: ['', [Validators.required], [checkUsername()]],
     password: ['', [Validators.required]],
@@ -60,7 +59,7 @@ export class UserCardComponent implements OnInit {
     }
   }
 
-  onLocationSelected(location: ILocationAutocompleteResult): void {
+  onLocationSelected(location: ILocationSearchResult): void {
     if (!this.selectedLocations.some((l) => l.id === location.id)) {
       this.userController
         .assignUserToLocation(this.userId, location.id)
@@ -69,7 +68,7 @@ export class UserCardComponent implements OnInit {
     }
   }
 
-  onLocationRemoved(location: ILocationAutocompleteResult): void {
+  onLocationRemoved(location: ILocationSearchResult): void {
     const index = this.selectedLocations.indexOf(location);
     if (index >= 0) {
       this.userController
