@@ -13,6 +13,7 @@ import { headerInterceptor } from './shared/interceptors/header.interceptor';
 import { AuthenticationController } from './authentication/controllers/authentication.controller';
 import { AppInit } from './shared/utils/provider-factory';
 import { MatNativeDateModule } from '@angular/material/core';
+import { DatePipe } from '@angular/common';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -20,6 +21,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideAnimationsAsync(),
     provideHttpClient(withFetch(), withInterceptors([headerInterceptor])),
+    DatePipe,
     importProvidersFrom(MatNativeDateModule),
     {
       provide: APP_INITIALIZER,

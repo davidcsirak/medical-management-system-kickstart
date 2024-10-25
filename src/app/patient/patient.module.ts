@@ -13,6 +13,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { CardComponent } from '../shared/components/card/card.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { UserModule } from '../user/user.module';
+import { SearchableSelectComponent } from '../shared/components/searchable-select/searchable-select.component';
 
 @NgModule({
   declarations: [PatientCardComponent, PatientListComponent],
@@ -29,6 +30,7 @@ import { UserModule } from '../user/user.module';
     CardComponent,
     MatDatepickerModule,
     UserModule,
+    SearchableSelectComponent,
   ],
 })
 export class PatientModule {}

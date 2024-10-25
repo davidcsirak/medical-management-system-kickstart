@@ -41,13 +41,18 @@
 
     <mat-form-field class="mb-4 w-full" appearance="outline">
       <mat-label>Gyerekkori név</mat-label>
-      <input matInput type="text" formControlName="name" required />
+      <input matInput type="text" formControlName="birthName" required />
       <mat-error *ngIf="name?.hasError('required')">Kötelező mező!</mat-error>
     </mat-form-field>
 
     <mat-form-field class="mb-4 w-full" appearance="outline">
       <mat-label>Születési dátum</mat-label>
-      <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" required />
+      <input
+        matInput
+        [matDatepicker]="picker"
+        (dateChange)="onDateChange($event)"
+        formControlName="dateOfBirth"
+        required />
       <mat-hint>MM/DD/YYYY</mat-hint>
       <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
@@ -55,8 +60,14 @@
 
     <mat-form-field class="mb-4 w-full" appearance="outline">
       <mat-label>Anyja gyerekkori neve</mat-label>
-      <input matInput type="text" formControlName="name" required />
+      <input matInput type="text" formControlName="motherBirthName" required />
       <mat-error *ngIf="name?.hasError('required')">Kötelező mező!</mat-error>
     </mat-form-field>
+
+    @if (currentUser) {
+      <app-searchable-select
+        formControlName="serviceProviderId"
+        [userId]="currentUser.id"></app-searchable-select>
+    }
   </form>
 </app-card>

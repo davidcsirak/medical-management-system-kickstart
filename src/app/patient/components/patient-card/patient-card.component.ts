@@ -9,6 +9,8 @@ import { ICreatePatientRequest } from '../../interfaces/create-patient-request.i
 import { UrlEnum } from '../../../shared/enums/url.enum';
 import { ILocationSearchResult } from '../../../location/interfaces/location-autocomplete-result.interface';
 import { AuthenticationController } from '../../../authentication/controllers/authentication.controller';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-patient-card',
@@ -48,6 +50,7 @@ export class PatientCardComponent implements OnInit {
     private patientController: PatientController,
     private route: ActivatedRoute,
     private authController: AuthenticationController,
+    private datePipe: DatePipe,
   ) {}
 
   ngOnInit(): void {
@@ -117,5 +120,11 @@ export class PatientCardComponent implements OnInit {
       .editPatient(this.createPatientForm.value as ICreatePatientRequest, this.routeId!)
       .pipe(tap(() => this.router.navigate([UrlEnum.PATIENT])))
       .subscribe();
+  }
+
+  onDateChange($event: MatDatepickerInputEvent<string, Date>) {
+    this.dateOfBirth?.setValue(this.datePipe.transform($event.value, 'yyyy-MM-dd'), {
+      emitEvent: false,
+    });
   }
 }
