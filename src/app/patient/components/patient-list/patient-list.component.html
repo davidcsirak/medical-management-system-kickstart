@@ -1,1 +1,53 @@
-<p>patient-list works!</p>
+<div class="flex flex-col items-center">
+  <mat-card class="w-full p-8">
+    <div class="mb-6 text-center text-2xl">Páciens szűrő</div>
+    <form [formGroup]="patientFilterForm">
+      <div class="flex flex-row gap-4">
+        <mat-form-field class="mb-4 w-full" appearance="outline">
+          <mat-label>Név</mat-label>
+          <input matInput type="text" formControlName="name" />
+        </mat-form-field>
+        <mat-form-field class="mb-4 w-full" appearance="outline">
+          <mat-label>Születési dátum</mat-label>
+          <input
+            matInput
+            [matDatepicker]="picker"
+            (dateChange)="onDateChange($event)"
+            formControlName="dateOfBirth" />
+          <mat-hint>MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field class="mb-4 w-full" appearance="outline">
+          <mat-label>Neme</mat-label>
+          <mat-select formControlName="sex">
+            <mat-option [value]="SexEnum.MAN">Férfi</mat-option>
+            <mat-option [value]="SexEnum.WOMAN">Nő</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="mb-4 w-full" appearance="outline">
+          <mat-label>TAJ szám</mat-label>
+          <input matInput type="text" formControlName="socialSecurityNumber" required />
+        </mat-form-field>
+        <!-- @if (currentUser) {
+          <app-searchable-select
+            class="w-full"
+            formControlName="serviceProviderId"
+            [userId]="currentUser.id"></app-searchable-select>
+        } -->
+      </div>
+    </form>
+  </mat-card>
+  <div class="my-6">
+    @for (patient of patients; track $index) {
+      <mat-card class="p-4">
+        {{ patient.name }}
+        {{ patient.socialSecurityNumber }}
+      </mat-card>
+    }
+  </div>
+  <button mat-flat-button color="primary" routerLink="new">
+    <mat-icon>add</mat-icon>
+    Új páciens
+  </button>
+</div>

@@ -65,6 +65,37 @@ export class PatientCardComponent implements OnInit {
     this.loadPatientData();
   }
 
+  onLocationSelected(location: ILocationSearchResult): void {
+    this.serviceProviderId?.setValue(location.id);
+  }
+
+  loadPatientData(): void {
+    this.patientController
+      .getPatient(this.routeId!)
+      .pipe(tap((res) => this.createPatientForm.patchValue(res)))
+      .subscribe();
+  }
+
+  onCreatePatient(): void {
+    this.patientController
+      .createPatient(this.createPatientForm.value as ICreatePatientRequest)
+      .pipe(tap((res) => this.router.navigate([UrlEnum.PATIENT, res.id, UrlEnum.EDIT])))
+      .subscribe();
+  }
+
+  onSavePatient(): void {
+    this.patientController
+      .editPatient(this.createPatientForm.value as ICreatePatientRequest, this.routeId!)
+      .pipe(tap(() => this.router.navigate([UrlEnum.PATIENT])))
+      .subscribe();
+  }
+
+  onDateChange($event: MatDatepickerInputEvent<string, Date>) {
+    this.dateOfBirth?.setValue(this.datePipe.transform($event.value, 'yyyy-MM-dd'), {
+      emitEvent: false,
+    });
+  }
+
   get name() {
     return this.createPatientForm.get('name');
   }
@@ -95,36 +126,5 @@ export class PatientCardComponent implements OnInit {
 
   get serviceProviderId() {
     return this.createPatientForm.get('serviceProviderId');
-  }
-
-  onLocationSelected(location: ILocationSearchResult): void {
-    this.serviceProviderId?.setValue(location.id);
-  }
-
-  loadPatientData(): void {
-    this.patientController
-      .getPatient(this.routeId!)
-      .pipe(tap((res) => this.createPatientForm.patchValue(res)))
-      .subscribe();
-  }
-
-  onCreatePatient(): void {
-    this.patientController
-      .createPatient(this.createPatientForm.value as ICreatePatientRequest)
-      .pipe(tap((res) => this.router.navigate([UrlEnum.PATIENT, res.id, UrlEnum.EDIT])))
-      .subscribe();
-  }
-
-  onSavePatient(): void {
-    this.patientController
-      .editPatient(this.createPatientForm.value as ICreatePatientRequest, this.routeId!)
-      .pipe(tap(() => this.router.navigate([UrlEnum.PATIENT])))
-      .subscribe();
-  }
-
-  onDateChange($event: MatDatepickerInputEvent<string, Date>) {
-    this.dateOfBirth?.setValue(this.datePipe.transform($event.value, 'yyyy-MM-dd'), {
-      emitEvent: false,
-    });
   }
 }

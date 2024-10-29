@@ -4,6 +4,7 @@ import { AuthenticationController } from '../../controllers/authentication.contr
 import { catchError, of, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { UrlEnum } from '../../../shared/enums/url.enum';
+import { RoleEnum } from '../../../shared/enums/role.enum';
 
 @Component({
   selector: 'app-login',
@@ -36,7 +37,13 @@ export class LoginComponent {
       this.authController
         .login(username, password)
         .pipe(
-          tap(() => this.rotuer.navigate([UrlEnum.USER])),
+          tap((res) => {
+            if (res.role === RoleEnum.ROLE_ADMIN) {
+              this.rotuer.navigate([UrlEnum.USER]);
+            } else {
+              this.rotuer.navigate([UrlEnum.PATIENT]);
+            }
+          }),
           catchError(() => {
             this.loginForm.enable();
             return of(null);

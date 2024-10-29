@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '../../shared/services/api.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { ICreatePatientRequest } from '../interfaces/create-patient-request.interface';
 import { IPatientGet } from '../interfaces/patient-get.interface';
 import { Observable } from 'rxjs';
 import { PATIENT_URL } from '../utils/patient-path';
+import { IPatient } from '../interfaces/patient.interface';
+import { IQueryResponse } from '../../shared/interfaces/query-response.interface';
+import { IPatientFilterValues } from '../interfaces/patient-filter.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -24,5 +27,33 @@ export class PatientService extends ApiService {
 
   editPatient(req: ICreatePatientRequest, id: string): Observable<IPatientGet> {
     return this.put(`${PATIENT_URL}/${id}`, req);
+  }
+
+  getPatients(
+    page: number,
+    size: number,
+    patientFilter: IPatientFilterValues,
+  ): Observable<IQueryResponse<IPatient>> {
+    let queryParams = new HttpParams().set('page', page).set('size', size);
+
+    if (patientFilter.name) {
+      queryParams = queryParams.set('name', patientFilter.name);
+    }
+    if (patientFilter.socialSecurityNumber) {
+      queryParams = queryParams.set('socialSecurityNumber', patientFilter.socialSecurityNumber);
+    }
+    if (patientFilter.placeOfBirth) {
+      queryParams = queryParams.set('placeOfBirth', patientFilter.placeOfBirth);
+    }
+    if (patientFilter.dateOfBirth) {
+      queryParams = queryParams.set('dateOfBirth', patientFilter.dateOfBirth);
+    }
+    if (patientFilter.sex) {
+      queryParams = queryParams.set('sex', patientFilter.sex);
+    }
+
+    return this.http.get<IQueryResponse<IPatient>>(`${PATIENT_URL}`, {
+      params: queryParams,
+    });
   }
 }
