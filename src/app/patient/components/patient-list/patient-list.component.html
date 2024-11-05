@@ -14,7 +14,6 @@
             [matDatepicker]="picker"
             (dateChange)="onDateChange($event)"
             formControlName="dateOfBirth" />
-          <mat-hint>MM/DD/YYYY</mat-hint>
           <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
@@ -27,22 +26,35 @@
         </mat-form-field>
         <mat-form-field class="mb-4 w-full" appearance="outline">
           <mat-label>TAJ szám</mat-label>
-          <input matInput type="text" formControlName="socialSecurityNumber" required />
+          <input matInput type="text" formControlName="socialSecurityNumber" />
         </mat-form-field>
-        <!-- @if (currentUser) {
-          <app-searchable-select
-            class="w-full"
-            formControlName="serviceProviderId"
-            [userId]="currentUser.id"></app-searchable-select>
-        } -->
+        <app-single-searchable-select class="mb-4 w-full" formControlName="serviceProviderId">
+        </app-single-searchable-select>
+      </div>
+      <div class="flex flex-row justify-end gap-4">
+        <button mat-flat-button color="primary" (click)="onFilter()">
+          <mat-icon>search</mat-icon>
+          Szűrés
+        </button>
+        <button mat-flat-button color="warn" (click)="onClearFilters()">
+          <mat-icon>clear</mat-icon>
+          Szűrők törlése
+        </button>
       </div>
     </form>
   </mat-card>
   <div class="my-6">
     @for (patient of patients; track $index) {
-      <mat-card class="p-4">
-        {{ patient.name }}
-        {{ patient.socialSecurityNumber }}
+      <mat-card class="w-full items-center gap-4 p-4">
+        <div class="mb-4 mt-8">
+          <mat-icon class="scale-[3]">account_circle</mat-icon>
+        </div>
+        <div class="text-xl text-gray-600">{{ patient.name }}</div>
+        <div>{{ patient.socialSecurityNumber }}</div>
+        <div class="flex flex-row gap-4">
+          <button mat-flat-button>Szerkesztés</button>
+          <button mat-flat-button>Megtekintés</button>
+        </div>
       </mat-card>
     }
   </div>

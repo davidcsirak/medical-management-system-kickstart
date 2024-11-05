@@ -1,0 +1,14 @@
+<mat-form-field class="w-full" appearance="outline">
+  <mat-label>Telephely</mat-label>
+  <mat-select [formControl]="selectControl" [required]="isRequired" #select>
+    <mat-option>
+      <ngx-mat-select-search
+        [formControl]="searchControl"
+        placeholderLabel="Keresés"
+        noEntriesFoundLabel="Nincs eredmény"></ngx-mat-select-search>
+    </mat-option>
+    <mat-option *ngFor="let value of filteredValues | async" [value]="value.id">
+      {{ value.shortName }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>

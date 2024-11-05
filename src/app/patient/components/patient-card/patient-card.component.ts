@@ -7,8 +7,6 @@ import { SexEnum } from '../../enums/sex.enum';
 import { tap } from 'rxjs';
 import { ICreatePatientRequest } from '../../interfaces/create-patient-request.interface';
 import { UrlEnum } from '../../../shared/enums/url.enum';
-import { ILocationSearchResult } from '../../../location/interfaces/location-autocomplete-result.interface';
-import { AuthenticationController } from '../../../authentication/controllers/authentication.controller';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { DatePipe } from '@angular/common';
 
@@ -27,8 +25,6 @@ export class PatientCardComponent implements OnInit {
   public routeId = this.route.snapshot.paramMap.get('id');
 
   public title!: string;
-
-  public currentUser = this.authController.getCurrentUserValue();
 
   public createPatientForm = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(2)]],
@@ -49,30 +45,34 @@ export class PatientCardComponent implements OnInit {
     private router: Router,
     private patientController: PatientController,
     private route: ActivatedRoute,
-    private authController: AuthenticationController,
     private datePipe: DatePipe,
   ) {}
 
   ngOnInit(): void {
     if (!this.routeId || this.router.url.includes('new')) {
       this.changeType = ChangeTypeEnum.CREATE;
-      this.title = 'Ellátott létrehozása';
+      this.title = 'Páciens létrehozása';
       return;
-    } else {
+    } else if (this.router.url.includes('edit')) {
       this.changeType = ChangeTypeEnum.EDIT;
-      this.title = 'Ellátott szerkesztése';
+      this.title = 'Páciens szerkesztése';
+    } else {
+      this.changeType = ChangeTypeEnum.VIEW;
+      this.title = 'Páciens megtekintése';
+      this.createPatientForm.disable();
     }
     this.loadPatientData();
-  }
-
-  onLocationSelected(location: ILocationSearchResult): void {
-    this.serviceProviderId?.setValue(location.id);
   }
 
   loadPatientData(): void {
     this.patientController
       .getPatient(this.routeId!)
-      .pipe(tap((res) => this.createPatientForm.patchValue(res)))
+      .pipe(
+        tap((res) => {
+          this.createPatientForm.patchValue(res);
+          this.createPatientForm.controls.serviceProviderId.setValue(res.serviceProvider.id);
+        }),
+      )
       .subscribe();
   }
 
@@ -86,8 +86,12 @@ export class PatientCardComponent implements OnInit {
   onSavePatient(): void {
     this.patientController
       .editPatient(this.createPatientForm.value as ICreatePatientRequest, this.routeId!)
-      .pipe(tap(() => this.router.navigate([UrlEnum.PATIENT])))
+      .pipe(tap(() => this.router.navigate([UrlEnum.PATIENT, this.routeId, UrlEnum.VIEW])))
       .subscribe();
+  }
+
+  onEditPatient() {
+    this.router.navigate([UrlEnum.PATIENT, this.routeId, UrlEnum.EDIT]);
   }
 
   onDateChange($event: MatDatepickerInputEvent<string, Date>) {

@@ -4,7 +4,6 @@ import { FormBuilder } from '@angular/forms';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { Router } from '@angular/router';
 import { SexEnum } from '../../enums/sex.enum';
-import { AuthenticationController } from '../../../authentication/controllers/authentication.controller';
 import { tap } from 'rxjs';
 import { IPatient } from '../../interfaces/patient.interface';
 import { PatientController } from '../../controllers/patient.controller';
@@ -22,8 +21,6 @@ export class PatientListComponent implements OnInit {
 
   public SexEnum = SexEnum;
 
-  public currentUser = this.authController.getCurrentUserValue();
-
   public paginationConfig: IPaginatorData = DEFAULT_PAGINATION_CONFIG;
 
   public patientFilterForm = this.fb.group({
@@ -38,12 +35,10 @@ export class PatientListComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private datePipe: DatePipe,
-    private authController: AuthenticationController,
     private patientController: PatientController,
   ) {}
 
   ngOnInit(): void {
-    console.log(this.patientFilterForm.value);
     this.getPatients();
   }
 
@@ -57,6 +52,15 @@ export class PatientListComponent implements OnInit {
         }),
       )
       .subscribe();
+  }
+
+  onFilter() {
+    this.getPatients();
+  }
+
+  onClearFilters() {
+    this.patientFilterForm.reset();
+    this.getPatients();
   }
 
   onDateChange($event: MatDatepickerInputEvent<string, Date>) {

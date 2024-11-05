@@ -3,7 +3,8 @@
     matInput
     placeholder="Telephely hozzárendelése"
     [matAutocomplete]="auto"
-    [formControl]="locationControl" />
+    [formControl]="locationControl"
+    (focus)="onInputFocus()" />
   <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectLocation($event.option.value)">
     <mat-option *ngFor="let location of filteredLocations" [value]="location">
       {{ location.shortName }}

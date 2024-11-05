@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { debounceTime, switchMap, Observable, tap, startWith } from 'rxjs';
+import { debounceTime, switchMap, Observable, tap } from 'rxjs';
 import { ILocationSearchResult } from '../../../location/interfaces/location-autocomplete-result.interface';
 import { IAutocompletePageable } from '../../../shared/interfaces/autocomplete-pageable.interface';
 import { IQueryResponse } from '../../../shared/interfaces/query-response.interface';
@@ -24,7 +24,6 @@ export class LocationAutocompleteComponent {
   constructor(private locationController: LocationController) {
     this.locationControl.valueChanges
       .pipe(
-        startWith(''),
         debounceTime(500),
         switchMap((value) => this.fetchLocations(value || '')),
         tap((res) => {
@@ -41,6 +40,14 @@ export class LocationAutocompleteComponent {
 
   selectLocation(location: ILocationSearchResult): void {
     this.locationSelected.emit(location);
-    this.locationControl.setValue('');
+    this.locationControl.reset();
+  }
+
+  onInputFocus(): void {
+    if (!this.locationControl.value) {
+      this.fetchLocations('').subscribe((res) => {
+        this.filteredLocations = res.content;
+      });
+    }
   }
 }

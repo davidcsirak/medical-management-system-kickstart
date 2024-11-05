@@ -4,6 +4,7 @@
   [formGroup]="createPatientForm"
   (create)="onCreatePatient()"
   (save)="onSavePatient()"
+  (edit)="onEditPatient()"
   [showDeleteButtonOnEditMode]="false">
   <form [formGroup]="createPatientForm">
     <mat-form-field class="mb-4 w-full" appearance="outline">
@@ -53,7 +54,6 @@
         (dateChange)="onDateChange($event)"
         formControlName="dateOfBirth"
         required />
-      <mat-hint>MM/DD/YYYY</mat-hint>
       <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
@@ -64,10 +64,7 @@
       <mat-error *ngIf="name?.hasError('required')">Kötelező mező!</mat-error>
     </mat-form-field>
 
-    @if (currentUser) {
-      <app-searchable-select
-        formControlName="serviceProviderId"
-        [userId]="currentUser.id"></app-searchable-select>
-    }
+    <app-single-searchable-select formControlName="serviceProviderId">
+    </app-single-searchable-select>
   </form>
 </app-card>

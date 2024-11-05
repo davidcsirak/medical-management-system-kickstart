@@ -5,4 +5,5 @@ export enum UrlEnum {
   LOCATION = 'location',
   EDIT = 'edit',
   NEW = 'new',
+  VIEW = 'view',
 }

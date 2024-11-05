@@ -16,6 +16,10 @@ const routes: Routes = [
     path: ':id/edit',
     component: PatientCardComponent,
   },
+  {
+    path: ':id/view',
+    component: PatientCardComponent,
+  },
 ];
 
 @NgModule({

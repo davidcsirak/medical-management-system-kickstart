@@ -23,7 +23,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 
 @Component({
-  selector: 'app-searchable-select',
+  selector: 'app-server-side-searchable-select',
   standalone: true,
   imports: [
     CommonModule,
@@ -32,22 +32,22 @@ import { MatSelectModule } from '@angular/material/select';
     MatFormFieldModule,
     MatSelectModule,
   ],
-  templateUrl: './searchable-select.component.html',
-  styleUrl: './searchable-select.component.scss',
+  templateUrl: './server-side-searchable-select.component.html',
+  styleUrl: './server-side-searchable-select.component.scss',
 })
-export class SearchableSelectComponent implements OnInit, ControlValueAccessor {
+export class ServerSideSearchableSelectComponent implements OnInit, ControlValueAccessor {
   @Input({ required: true }) userId!: string;
 
-  public selectControl: FormControl = new FormControl('');
+  public selectControl = new FormControl('');
   public searchControl: FormControl = new FormControl('');
+
+  public filteredValues = new ReplaySubject<any[]>(1);
+
   public searching = false;
   public isRequired = false;
-  public filteredValues: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
-
-  public comparator = (o1: any, o2: any) =>
-    o1 && o2 && o1.id === o2.id && o1.shortName === o2.shortName;
 
   private destroyRef = inject(DestroyRef);
+
   protected onChange!: (value: unknown) => void;
 
   protected onTouched!: () => void;
@@ -86,9 +86,9 @@ export class SearchableSelectComponent implements OnInit, ControlValueAccessor {
           this.searching = false;
           const filteredValues = res.content;
           this.filteredValues.next(filteredValues);
-          if (filteredValues.length === 1) {
-            this.selectControl.setValue(filteredValues[0].id);
-          }
+          // if (filteredValues.length === 1) {
+          //   this.selectControl.setValue(filteredValues[0].id);
+          // }
         }),
         takeUntilDestroyed(this.destroyRef),
         catchError((err) => {
@@ -104,6 +104,7 @@ export class SearchableSelectComponent implements OnInit, ControlValueAccessor {
   writeValue(value: any): void {
     this.filteredValues.next([value]);
     this.selectControl.setValue(value.id);
+    // TODO proper handling of setValue in parent component
   }
   registerOnChange(fn: () => void): void {
     this.onChange = fn;
