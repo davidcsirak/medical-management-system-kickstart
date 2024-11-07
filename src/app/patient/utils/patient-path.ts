@@ -1,2 +1,4 @@
-const BASE_API_URL = 'http://92.52.252.160:8080/api/v1/service-recipient';
-export const PATIENT_URL = `${BASE_API_URL}`;
+import { environment } from '../../../environments/environment';
+
+const PATIENT_API_URL = `${environment.BASE_API_URL}/service-recipient`;
+export const PATIENT_URL = `${PATIENT_API_URL}`;

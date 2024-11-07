@@ -1,3 +1,5 @@
-const BASE_API_URL = 'http://92.52.252.160:8080/api/v1/admin/user';
-export const CREATE_USER_URL = `${BASE_API_URL}/register`;
-export const USER_URL = `${BASE_API_URL}`;
+import { environment } from '../../../environments/environment';
+
+const USER_API_URL = `${environment.BASE_API_URL}/admin/user`;
+export const CREATE_USER_URL = `${USER_API_URL}/register`;
+export const USER_URL = `${USER_API_URL}`;

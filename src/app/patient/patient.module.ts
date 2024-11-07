@@ -14,7 +14,7 @@ import { CardComponent } from '../shared/components/card/card.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { UserModule } from '../user/user.module';
 import { SingleSearchableSelectComponent } from '../shared/components/single-searchable-select/single-searchable-select.component';
-
+import { MatPaginatorModule } from '@angular/material/paginator';
 @NgModule({
   declarations: [PatientCardComponent, PatientListComponent],
   imports: [
@@ -31,6 +31,7 @@ import { SingleSearchableSelectComponent } from '../shared/components/single-sea
     MatDatepickerModule,
     UserModule,
     SingleSearchableSelectComponent,
+    MatPaginatorModule,
   ],
 })
 export class PatientModule {}

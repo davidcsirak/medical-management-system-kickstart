@@ -1,4 +1,6 @@
-const BASE_API_URL = 'http://92.52.252.160:8080/api/v1/admin/service-provider';
-export const CREATE_LOCATION_URL = `${BASE_API_URL}`;
-export const LOCATION_AUTOCOMPLETE_URL = `${BASE_API_URL}/search`;
-export const LOCATION_URL = `${BASE_API_URL}`;
+import { environment } from '../../../environments/environment';
+
+const LOCATION_API_URL = `${environment.BASE_API_URL}/admin/service-provider`;
+export const CREATE_LOCATION_URL = `${LOCATION_API_URL}`;
+export const LOCATION_AUTOCOMPLETE_URL = `${LOCATION_API_URL}/search`;
+export const LOCATION_URL = `${LOCATION_API_URL}`;

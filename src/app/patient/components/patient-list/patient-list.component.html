@@ -43,23 +43,42 @@
       </div>
     </form>
   </mat-card>
-  <div class="my-6">
+  <mat-card class="my-6 w-full p-4">
+    <div class="flex flex-row items-center justify-between">
+      <button mat-flat-button color="primary" routerLink="new">
+        <mat-icon>add</mat-icon>
+        Új páciens
+      </button>
+      <mat-paginator
+        [length]="paginationConfig.totalElements"
+        [pageSize]="paginationConfig.pageSize"
+        [pageIndex]="paginationConfig.pageIndex"
+        [pageSizeOptions]="[4, 8, 16]"
+        showFirstLastButtons
+        (page)="onPageChange($event)">
+      </mat-paginator>
+    </div>
+  </mat-card>
+  <div class="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2 lg:grid-cols-4">
     @for (patient of patients; track $index) {
       <mat-card class="w-full items-center gap-4 p-4">
         <div class="mb-4 mt-8">
           <mat-icon class="scale-[3]">account_circle</mat-icon>
         </div>
         <div class="text-xl text-gray-600">{{ patient.name }}</div>
-        <div>{{ patient.socialSecurityNumber }}</div>
+        <div class="flex flex-col items-center">
+          <div class="font-medium">TAJ</div>
+          <div>{{ patient.socialSecurityNumber }}</div>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="font-medium">Telephely</div>
+          <div>{{ patient.serviceProvider.shortName }}</div>
+        </div>
         <div class="flex flex-row gap-4">
-          <button mat-flat-button>Szerkesztés</button>
-          <button mat-flat-button>Megtekintés</button>
+          <button mat-flat-button [routerLink]="[patient.id, 'edit']">Szerkesztés</button>
+          <button mat-flat-button [routerLink]="[patient.id, 'view']">Megtekintés</button>
         </div>
       </mat-card>
     }
   </div>
-  <button mat-flat-button color="primary" routerLink="new">
-    <mat-icon>add</mat-icon>
-    Új páciens
-  </button>
 </div>

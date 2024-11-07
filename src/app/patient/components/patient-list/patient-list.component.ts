@@ -8,8 +8,9 @@ import { tap } from 'rxjs';
 import { IPatient } from '../../interfaces/patient.interface';
 import { PatientController } from '../../controllers/patient.controller';
 import { IPaginatorData } from '../../../shared/interfaces/paginator-data.interface';
-import { DEFAULT_PAGINATION_CONFIG } from '../../../user/utils/default-pagination.util';
+import { DEFAULT_CARD_PAGINATION_CONFIG } from '../../../user/utils/default-pagination.util';
 import { IPatientFilterValues } from '../../interfaces/patient-filter.interface';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-patient-list',
@@ -21,7 +22,7 @@ export class PatientListComponent implements OnInit {
 
   public SexEnum = SexEnum;
 
-  public paginationConfig: IPaginatorData = DEFAULT_PAGINATION_CONFIG;
+  public paginationConfig: IPaginatorData = DEFAULT_CARD_PAGINATION_CONFIG;
 
   public patientFilterForm = this.fb.group({
     name: [''],
@@ -39,28 +40,37 @@ export class PatientListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getPatients();
+    this.loadPatients();
   }
 
-  private getPatients() {
+  private loadPatients() {
+    console.log(this.patientFilterForm.value);
+
     this.patientController
       .getPatients(this.paginationConfig, this.patientFilterForm.value as IPatientFilterValues)
       .pipe(
         tap((res) => {
           this.patients = res.content;
           this.paginationConfig.totalElements = res.totalElements;
+          this.paginationConfig.pageSize = res.pageable.pageSize;
         }),
       )
       .subscribe();
   }
 
   onFilter() {
-    this.getPatients();
+    this.loadPatients();
   }
 
   onClearFilters() {
     this.patientFilterForm.reset();
-    this.getPatients();
+    this.loadPatients();
+  }
+
+  onPageChange($event: PageEvent) {
+    this.paginationConfig.pageIndex = $event.pageIndex;
+    this.paginationConfig.pageSize = $event.pageSize;
+    this.loadPatients();
   }
 
   onDateChange($event: MatDatepickerInputEvent<string, Date>) {
