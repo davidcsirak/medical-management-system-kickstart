@@ -1,6 +1,6 @@
 export interface IPatientFilterValues {
   name?: string;
-  dateOfBirth?: string;
+  year?: string | Date;
   sex?: string;
   socialSecurityNumber?: string;
   serviceProviderId?: string;

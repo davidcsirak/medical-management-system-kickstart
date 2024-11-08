@@ -9,6 +9,7 @@ import { ICreatePatientRequest } from '../../interfaces/create-patient-request.i
 import { UrlEnum } from '../../../shared/enums/url.enum';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { DatePipe } from '@angular/common';
+import { AuthenticationController } from '../../../authentication/controllers/authentication.controller';
 
 @Component({
   selector: 'app-patient-card',
@@ -46,12 +47,19 @@ export class PatientCardComponent implements OnInit {
     private patientController: PatientController,
     private route: ActivatedRoute,
     private datePipe: DatePipe,
+    private authController: AuthenticationController,
   ) {}
 
   ngOnInit(): void {
     if (!this.routeId || this.router.url.includes('new')) {
       this.changeType = ChangeTypeEnum.CREATE;
       this.title = 'Páciens létrehozása';
+      const currentUser = this.authController.getCurrentUserValue();
+      if (currentUser && currentUser.serviceProviders.length === 1) {
+        this.createPatientForm.controls.serviceProviderId.setValue(
+          currentUser.serviceProviders[0].id,
+        );
+      }
       return;
     } else if (this.router.url.includes('edit')) {
       this.changeType = ChangeTypeEnum.EDIT;

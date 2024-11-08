@@ -7,15 +7,19 @@
           <mat-label>Név</mat-label>
           <input matInput type="text" formControlName="name" />
         </mat-form-field>
-        <mat-form-field class="mb-4 w-full" appearance="outline">
-          <mat-label>Születési dátum</mat-label>
+        <mat-form-field class="mb-4 w-full cursor-pointer" appearance="outline">
+          <mat-label>Születési év</mat-label>
           <input
             matInput
             [matDatepicker]="picker"
-            (dateChange)="onDateChange($event)"
-            formControlName="dateOfBirth" />
+            formControlName="year"
+            (focus)="picker?.open()"
+            readonly />
           <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
+          <mat-datepicker
+            #picker
+            startView="multi-year"
+            (yearSelected)="chosenYearHandler($event, picker)"></mat-datepicker>
         </mat-form-field>
         <mat-form-field class="mb-4 w-full" appearance="outline">
           <mat-label>Neme</mat-label>
@@ -28,8 +32,11 @@
           <mat-label>TAJ szám</mat-label>
           <input matInput type="text" formControlName="socialSecurityNumber" />
         </mat-form-field>
-        <app-single-searchable-select class="mb-4 w-full" formControlName="serviceProviderId">
-        </app-single-searchable-select>
+        <app-searchable-select
+          class="mb-4 w-full"
+          formControlName="serviceProviderId"
+          [multiple]="true">
+        </app-searchable-select>
       </div>
       <div class="flex flex-row justify-end gap-4">
         <button mat-flat-button color="primary" (click)="onFilter()">
@@ -59,26 +66,30 @@
       </mat-paginator>
     </div>
   </mat-card>
-  <div class="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2 lg:grid-cols-4">
-    @for (patient of patients; track $index) {
-      <mat-card class="w-full items-center gap-4 p-4">
-        <div class="mb-4 mt-8">
-          <mat-icon class="scale-[3]">account_circle</mat-icon>
-        </div>
-        <div class="text-xl text-gray-600">{{ patient.name }}</div>
-        <div class="flex flex-col items-center">
-          <div class="font-medium">TAJ</div>
-          <div>{{ patient.socialSecurityNumber }}</div>
-        </div>
-        <div class="flex flex-col items-center">
-          <div class="font-medium">Telephely</div>
-          <div>{{ patient.serviceProvider.shortName }}</div>
-        </div>
-        <div class="flex flex-row gap-4">
-          <button mat-flat-button [routerLink]="[patient.id, 'edit']">Szerkesztés</button>
-          <button mat-flat-button [routerLink]="[patient.id, 'view']">Megtekintés</button>
-        </div>
-      </mat-card>
-    }
-  </div>
+  @if (paginationConfig.totalElements) {
+    <div class="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2 lg:grid-cols-4">
+      @for (patient of patients; track $index) {
+        <mat-card class="w-full items-center gap-4 p-4">
+          <div class="mb-4 mt-8">
+            <mat-icon class="scale-[3]">account_circle</mat-icon>
+          </div>
+          <div class="text-xl text-gray-600">{{ patient.name }}</div>
+          <div class="flex flex-col items-center">
+            <div class="font-medium">TAJ</div>
+            <div>{{ patient.socialSecurityNumber }}</div>
+          </div>
+          <div class="flex flex-col items-center">
+            <div class="font-medium">Telephely</div>
+            <div>{{ patient.serviceProvider.shortName }}</div>
+          </div>
+          <div class="flex flex-row gap-4">
+            <button mat-flat-button [routerLink]="[patient.id, 'edit']">Szerkesztés</button>
+            <button mat-flat-button [routerLink]="[patient.id, 'view']">Megtekintés</button>
+          </div>
+        </mat-card>
+      }
+    </div>
+  } @else {
+    <p class="text-xl">Nincs találat</p>
+  }
 </div>

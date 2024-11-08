@@ -13,8 +13,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { CardComponent } from '../shared/components/card/card.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { UserModule } from '../user/user.module';
-import { SingleSearchableSelectComponent } from '../shared/components/single-searchable-select/single-searchable-select.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { SearchableSelectComponent } from '../shared/components/searchable-select/searchable-select.component';
 @NgModule({
   declarations: [PatientCardComponent, PatientListComponent],
   imports: [
@@ -30,7 +30,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     CardComponent,
     MatDatepickerModule,
     UserModule,
-    SingleSearchableSelectComponent,
+    SearchableSelectComponent,
     MatPaginatorModule,
   ],
 })

@@ -45,8 +45,8 @@ export class PatientService extends ApiService {
     if (patientFilter.serviceProviderId) {
       queryParams = queryParams.set('serviceProviderId', patientFilter.serviceProviderId);
     }
-    if (patientFilter.dateOfBirth) {
-      queryParams = queryParams.set('dateOfBirth', patientFilter.dateOfBirth);
+    if (patientFilter.year) {
+      queryParams = queryParams.set('year', (patientFilter.year as Date).getFullYear());
     }
     if (patientFilter.sex) {
       queryParams = queryParams.set('sex', patientFilter.sex);

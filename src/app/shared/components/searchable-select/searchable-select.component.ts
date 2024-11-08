@@ -3,10 +3,10 @@ import {
   Component,
   DestroyRef,
   inject,
+  Input,
   OnInit,
   Optional,
   Self,
-  ViewChild,
 } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -15,7 +15,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { MatSelect, MatSelectModule } from '@angular/material/select';
+import { MatSelectModule } from '@angular/material/select';
 import { ReplaySubject, take, tap } from 'rxjs';
 import { AuthenticationController } from '../../../authentication/controllers/authentication.controller';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -24,7 +24,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 @Component({
-  selector: 'app-single-searchable-select',
+  selector: 'app-searchable-select',
   standalone: true,
   imports: [
     CommonModule,
@@ -33,12 +33,12 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
     MatFormFieldModule,
     MatSelectModule,
   ],
-  templateUrl: './single-searchable-select.component.html',
-  styleUrl: './single-searchable-select.component.scss',
+  templateUrl: './searchable-select.component.html',
+  styleUrl: './searchable-select.component.scss',
 })
-export class SingleSearchableSelectComponent
-  implements OnInit, AfterViewInit, ControlValueAccessor
-{
+export class SearchableSelectComponent implements OnInit, AfterViewInit, ControlValueAccessor {
+  @Input() multiple = false;
+
   protected values: any[] = [];
 
   public selectControl = new FormControl('');
@@ -48,8 +48,6 @@ export class SingleSearchableSelectComponent
 
   public isRequired = false;
   public isDisabled = false;
-
-  @ViewChild('select') singleSelect!: MatSelect;
 
   private destroyRef = inject(DestroyRef);
 

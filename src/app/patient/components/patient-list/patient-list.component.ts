@@ -1,8 +1,6 @@
-import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { MatDatepickerInputEvent } from '@angular/material/datepicker';
-import { Router } from '@angular/router';
+import { MatDatepicker, MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { SexEnum } from '../../enums/sex.enum';
 import { tap } from 'rxjs';
 import { IPatient } from '../../interfaces/patient.interface';
@@ -11,11 +9,19 @@ import { IPaginatorData } from '../../../shared/interfaces/paginator-data.interf
 import { DEFAULT_CARD_PAGINATION_CONFIG } from '../../../user/utils/default-pagination.util';
 import { IPatientFilterValues } from '../../interfaces/patient-filter.interface';
 import { PageEvent } from '@angular/material/paginator';
+import { DateAdapter, NativeDateAdapter } from '@angular/material/core';
+
+class CustomDateAdapter extends NativeDateAdapter {
+  override format(date: Date): string {
+    return `${date.getFullYear()}`;
+  }
+}
 
 @Component({
   selector: 'app-patient-list',
   templateUrl: './patient-list.component.html',
   styleUrl: './patient-list.component.scss',
+  providers: [{ provide: DateAdapter, useClass: CustomDateAdapter }],
 })
 export class PatientListComponent implements OnInit {
   public patients!: IPatient[];
@@ -26,7 +32,7 @@ export class PatientListComponent implements OnInit {
 
   public patientFilterForm = this.fb.group({
     name: [''],
-    dateOfBirth: [''],
+    year: [''],
     sex: [''],
     socialSecurityNumber: [''],
     serviceProviderId: [''],
@@ -34,8 +40,6 @@ export class PatientListComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private router: Router,
-    private datePipe: DatePipe,
     private patientController: PatientController,
   ) {}
 
@@ -44,8 +48,6 @@ export class PatientListComponent implements OnInit {
   }
 
   private loadPatients() {
-    console.log(this.patientFilterForm.value);
-
     this.patientController
       .getPatients(this.paginationConfig, this.patientFilterForm.value as IPatientFilterValues)
       .pipe(
@@ -73,13 +75,12 @@ export class PatientListComponent implements OnInit {
     this.loadPatients();
   }
 
-  onDateChange($event: MatDatepickerInputEvent<string, Date>) {
-    this.dateOfBirth?.setValue(this.datePipe.transform($event.value, 'yyyy-MM-dd'), {
-      emitEvent: false,
-    });
+  chosenYearHandler(date: Date, picker: MatDatepicker<Date>) {
+    this.year?.setValue(new Date(date.getFullYear(), 12, 0) as unknown as string);
+    picker.close();
   }
 
-  get dateOfBirth() {
-    return this.patientFilterForm.get('dateOfBirth');
+  get year() {
+    return this.patientFilterForm.get('year');
   }
 }
