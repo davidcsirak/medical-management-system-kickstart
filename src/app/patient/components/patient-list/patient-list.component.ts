@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { MatDatepicker, MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { MatDatepicker } from '@angular/material/datepicker';
 import { SexEnum } from '../../enums/sex.enum';
 import { tap } from 'rxjs';
 import { IPatient } from '../../interfaces/patient.interface';
