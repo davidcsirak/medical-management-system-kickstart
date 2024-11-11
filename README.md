@@ -1,6 +1,16 @@
 # MedicalManagementSystemKickstart
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.8.
+Frontend project containing the basic functionalities of a medical management system.
+Angular version 18.2.8.
+
+- Users, Locations and Patients
+- Permissions
+
+## Running in Docker
+
+1. docker build -t medical-management-system-kickstart:latest .
+2. docker run -d -p 4200:80 medical-management-system-kickstart
+3. Navigate to `http://localhost:4200/`
 
 ## Development server
 
