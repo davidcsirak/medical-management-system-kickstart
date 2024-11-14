@@ -7,7 +7,6 @@ import { UrlEnum } from '../../../shared/enums/url.enum';
 import { tap } from 'rxjs';
 import { ChangeTypeEnum } from '../../../shared/enums/change-type.enum';
 import { checkUsername } from '../../../shared/utils/async-validators';
-import { LocationController } from '../../../location/controllers/location.controller';
 import { ILocationSearchResult } from '../../../location/interfaces/location-autocomplete-result.interface';
 import { IUserGet } from '../../interfaces/user-get.interface';
 
@@ -42,7 +41,6 @@ export class UserCardComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private userController: UserController,
-    private locationController: LocationController,
     private route: ActivatedRoute,
   ) {}
   ngOnInit(): void {
