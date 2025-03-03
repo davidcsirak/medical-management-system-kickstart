@@ -53,8 +53,8 @@ export class PatientListComponent implements OnInit {
       .pipe(
         tap((res) => {
           this.patients = res.content;
-          this.paginationConfig.totalElements = res.totalElements;
-          this.paginationConfig.pageSize = res.pageable.pageSize;
+          this.paginationConfig.totalElements = res.page.totalElements;
+          this.paginationConfig.pageSize = res.page.size;
         }),
       )
       .subscribe();

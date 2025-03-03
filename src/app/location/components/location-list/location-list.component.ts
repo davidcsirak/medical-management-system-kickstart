@@ -40,8 +40,8 @@ export class LocationListComponent implements OnInit {
   private loadLocations() {
     this.locationController.getLocations(this.paginationConfig).subscribe((res) => {
       this.dataSource = res.content;
-      this.paginationConfig.totalElements = res.totalElements;
-      this.paginationConfig.pageSize = res.pageable.pageSize;
+      this.paginationConfig.totalElements = res.page.totalElements;
+      this.paginationConfig.pageSize = res.page.size;
     });
   }
 
